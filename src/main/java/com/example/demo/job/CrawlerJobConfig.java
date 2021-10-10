@@ -1,9 +1,5 @@
 package com.example.demo.job;
 
-import java.util.LinkedList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
 
@@ -21,18 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 import com.example.demo.tasklet.CrawlerTasklet;
 import com.example.demo.crawler.Crawler;
 import com.example.demo.crawler.strategy.CrawlerStrategyInterface;
-import com.example.demo.job.CrawlerStepDecider;
 
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
 public class CrawlerJobConfig {
-    private final List<CrawlerStrategyInterface> crawlerStrategyList;
-    private final CrawlerStepDecider crawlerStepDecider;
     private final Crawler cralwer;
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
-
 
     @Bean
     public Job crawlerJob() {
