@@ -1,4 +1,4 @@
-package com.example.demo.job;
+package com.example.demo.crawler.job;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
@@ -14,17 +14,21 @@ import org.springframework.batch.repeat.RepeatStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.example.demo.tasklet.CrawlerTasklet;
 import com.example.demo.crawler.Crawler;
+import com.example.demo.crawler.tasklet.CrawlerTasklet;
 import com.example.demo.crawler.strategy.CrawlerStrategyInterface;
+import com.example.demo.core.service.BroadcastService;
+import com.example.demo.core.dto.BroadcastDto;
+
 
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
 public class CrawlerJobConfig {
-    private final Crawler cralwer;
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
+    private final BroadcastService broadcastService;
+    private final Crawler crawler;
 
     @Bean
     public Job crawlerJob() {
@@ -36,8 +40,12 @@ public class CrawlerJobConfig {
     @Bean
     public Step step() {
         return stepBuilderFactory.get("crawlData")
-            .tasklet(new CrawlerTasklet(cralwer))
-            .build();
+            .tasklet((contribution, chunkContext) -> {
+                crawler.run()
+                    .stream()
+                    .map(broadcastService::createBroadcast);
+                return RepeatStatus.FINISHED;
+            }).build();
     }
 
 }
