@@ -12,6 +12,9 @@ import com.example.demo.core.dto.BroadcastDto;
 import com.example.demo.core.dto.BroadcastCreateDto;
 import com.example.demo.core.repository.BroadcastRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BroadcastService {
@@ -24,7 +27,10 @@ public class BroadcastService {
     }
 
     public BroadcastDto createBroadcast(BroadcastCreateDto broadcastCreateDto) {
-        return null;
+        Broadcast broadcast = Broadcast.builder()
+                                .build();
+        broadcastRepository.save(broadcast);
+        return BroadcastDto.fromEntity(broadcast);
     }
 }
 

@@ -2,6 +2,8 @@ package com.example.demo.core.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.math.BigInteger;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +13,6 @@ import lombok.Setter;
 @Setter
 public class Provider {
     @Id
-    private Long id;
+    private BigInteger id;
     private String name;
 }

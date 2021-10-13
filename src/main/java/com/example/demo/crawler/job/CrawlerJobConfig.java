@@ -43,7 +43,7 @@ public class CrawlerJobConfig {
             .tasklet((contribution, chunkContext) -> {
                 crawler.run()
                     .stream()
-                    .map(broadcastService::createBroadcast);
+                    .forEach(e -> broadcastService.createBroadcast(e));
                 return RepeatStatus.FINISHED;
             }).build();
     }

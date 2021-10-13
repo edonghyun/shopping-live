@@ -26,12 +26,9 @@ public class Crawler {
             results.addAll(
                 crawlerStrategy.parse()
                     .stream()
-                    .map((object) -> {
-                        return modelMapper.map(
-                                object,
-                                BroadcastCreateDto.class
-                        );
-                    })
+                    .map((object) -> modelMapper.map(
+                        object, BroadcastCreateDto.class
+                    ))
                     .collect(Collectors.toList())
             );
         }

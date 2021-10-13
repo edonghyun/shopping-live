@@ -1,5 +1,7 @@
 package com.example.demo.core.dto;
 
+import java.math.BigInteger;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Builder;
@@ -11,7 +13,7 @@ import com.example.demo.core.entity.Provider;
 @Setter
 @Builder
 public class BroadcastDto {
-    private Long id;
+    private BigInteger id;
     private Provider provider;
 
     public static BroadcastDto fromEntity(Broadcast broadcast) {
