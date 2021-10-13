@@ -24,42 +24,31 @@ import com.example.demo.crawler.client.Client;
 @Component
 @RequiredArgsConstructor
 public class NaverShoppingLiveStrategy implements CrawlerStrategyInterface {
+    private final String baseUrl = "https://apis.naver.com/selectiveweb/selectiveweb/v1/lives/timeline/daily?next=%d&size=10";
+    private final String initialUrl = "https://apis.naver.com/selectiveweb/live_commerce_web/v2/broadcast/milestones";
+
     private final Client Client;
     private final JSONParser jsonParser;
 
-    public List<Object> run() {
-        return sendGet();
-    }
-
-    private List<Object> sendGet() {
+    public List<Object> parse() {
         List<Object> result = new ArrayList();
-        
-        HttpResponse<String> response = Client.doGet("https://apis.naver.com/selectiveweb/live_commerce_web/v2/broadcast/milestones");
-        
+        JSONObject parsedMilestone, objectList;
+        String url, responseBody;
+        Long timestamp;
+
+        HttpResponse<String> response = Client.doGet(initialUrl);
         JSONArray milestones = (JSONArray)jsonParser.parse(response.body());        
-        
-        String baseUrl = "https://apis.naver.com/selectiveweb/selectiveweb/v1/lives/timeline/daily?next=%d&size=10";
         for(Object  milestone:milestones) {        	
-        	JSONObject parsedMilestone = (JSONObject)milestone;
-        	parsedMilestone = (JSONObject) parsedMilestone.get("milestone");
-
-        	Long timestamp = (Long) parsedMilestone.get("timestamp");
-        	response = Client.doGet(String.format(baseUrl, timestamp));
-
-        	JSONObject objectList;
-        	JSONArray list;
-        	while(true) {
-            	response = Client.doGet(String.format(baseUrl, timestamp));
-            	objectList = (JSONObject)jsonParser.parse(response.body());
-            	list = (JSONArray)objectList.get("list");
-                result.addAll(list);
-                log.info("{}", list);
-                
-            	timestamp = (Long)objectList.get("next");
-                if(timestamp == null) {
-            		break;
-            	}
-        	}
+        	parsedMilestone = (JSONObject)milestone;
+        	parsedMilestone = (JSONObject)parsedMilestone.get("milestone");
+            timestamp = (Long)parsedMilestone.get("timestamp");
+            do {
+                url = String.format(baseUrl, timestamp);
+                responseBody = Client.doGet(url).body();
+            	objectList = (JSONObject)jsonParser.parse(responseBody);
+                timestamp = (Long)objectList.get("timestamp");
+                result.addAll((JSONArray)objectList.get("list"));
+            } while(timestamp != null);
         }
 
         return result;

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.example.demo.crawler.strategy.CrawlerStrategyInterface;
 
 public class KakaoShoppingLiveStrategy implements CrawlerStrategyInterface {
-    public List<Object> run() {
+    public List<Object> parse() {
         return null;
     }
 }

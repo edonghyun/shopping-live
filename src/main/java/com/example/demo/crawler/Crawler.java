@@ -22,9 +22,9 @@ public class Crawler {
 
     public List<BroadcastCreateDto> run() {
         List<BroadcastCreateDto> results = new LinkedList();
-        for(CrawlerStrategyInterface strategy : crawlerStrategies) {
+        for(CrawlerStrategyInterface crawlerStrategy : crawlerStrategies) {
             results.addAll(
-                strategy.run()
+                crawlerStrategy.parse()
                     .stream()
                     .map((object) -> {
                         return modelMapper.map(
