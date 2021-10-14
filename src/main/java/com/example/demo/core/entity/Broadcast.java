@@ -1,6 +1,7 @@
 package com.example.demo.core.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.Column;
 import javax.persistence.Id;
 import java.math.BigInteger;
 import javax.persistence.FetchType;
@@ -20,6 +21,9 @@ import com.example.demo.core.entity.Provider;
 public class Broadcast {
     @Id
     private BigInteger id;
+    
+    @Column(unique=true)
+    private String remoteId;
 
     @ManyToOne(targetEntity=Provider.class, fetch=FetchType.LAZY)
     private Provider provider;

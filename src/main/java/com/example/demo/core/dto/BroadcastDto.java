@@ -14,11 +14,13 @@ import com.example.demo.core.entity.Provider;
 @Builder
 public class BroadcastDto {
     private BigInteger id;
+    private String remoteId;
     private Provider provider;
 
     public static BroadcastDto fromEntity(Broadcast broadcast) {
         return BroadcastDto.builder()
             .id(broadcast.getId())
+            .remoteId(broadcast.getRemoteId())
             .provider(broadcast.getProvider())
             .build();
     }
