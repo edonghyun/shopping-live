@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
+import lombok.Getter;
 
 import com.example.demo.crawler.strategy.CrawlerStrategyInterface;
 import com.example.demo.helper.JSONParser;
@@ -25,10 +26,12 @@ import com.example.demo.crawler.dto.NaverShoppingBroadcastDto;
 
 @Slf4j
 @Component
+@Getter
 @RequiredArgsConstructor
 public class NaverShoppingLiveStrategy implements CrawlerStrategyInterface {
     private final String baseUrl = "https://apis.naver.com/selectiveweb/selectiveweb/v1/lives/timeline/daily?next=%d&size=10";
     private final String initialUrl = "https://apis.naver.com/selectiveweb/live_commerce_web/v2/broadcast/milestones";
+    private final String provider = "NAVER";
 
     private final Client Client;
     private final JSONParser jsonParser;
@@ -43,6 +46,7 @@ public class NaverShoppingLiveStrategy implements CrawlerStrategyInterface {
         );
         return BroadcastCreateDto.builder()
                 .remoteId(dto.getBroadcastId())
+                .provider(getProvider())
                 .extraData(dto)
                 .build();
     }
@@ -53,14 +57,14 @@ public class NaverShoppingLiveStrategy implements CrawlerStrategyInterface {
         String url, responseBody;
         Long timestamp;
 
-        HttpResponse<String> response = Client.doGet(initialUrl);
+        HttpResponse<String> response = Client.doGet(getInitialUrl());
         JSONArray milestones = (JSONArray)jsonParser.parse(response.body());        
         for(Object  milestone:milestones) {        	
         	parsedMilestone = (JSONObject)milestone;
         	parsedMilestone = (JSONObject)parsedMilestone.get("milestone");
             timestamp = (Long)parsedMilestone.get("timestamp");
             do {
-                url = String.format(baseUrl, timestamp);
+                url = String.format(getBaseUrl(), timestamp);
                 responseBody = Client.doGet(url).body();
             	objectList = (JSONObject)jsonParser.parse(responseBody);
                 timestamp = (Long)objectList.get("timestamp");
