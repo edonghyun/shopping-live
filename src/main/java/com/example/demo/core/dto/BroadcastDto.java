@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.Builder;
 
 import com.example.demo.core.entity.Broadcast;
-import com.example.demo.core.entity.Provider;
 
 @Getter
 @Setter
@@ -15,7 +14,7 @@ import com.example.demo.core.entity.Provider;
 public class BroadcastDto {
     private BigInteger id;
     private String remoteId;
-    private Provider provider;
+    private String provider;
     private Object extraData;
 
     public static BroadcastDto fromEntity(Broadcast broadcast) {

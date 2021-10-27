@@ -11,8 +11,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.Builder;
 
-import com.example.demo.core.entity.Provider;
-
 
 @Entity
 @Getter
@@ -25,8 +23,6 @@ public class Broadcast {
     @Column(unique=true)
     private String remoteId;
 
-    @ManyToOne(targetEntity=Provider.class, fetch=FetchType.LAZY)
-    private Provider provider;
-
+    private String provider;
     private Object extraData;
 }
