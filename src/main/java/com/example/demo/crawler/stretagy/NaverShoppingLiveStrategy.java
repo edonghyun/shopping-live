@@ -34,6 +34,19 @@ public class NaverShoppingLiveStrategy implements CrawlerStrategyInterface {
     private final JSONParser jsonParser;
     private final ModelMapper modelMapper;
 
+    private BroadcastCreateDto convertObjectDataToBroadcastCreateDto(
+        Object object
+    ) {
+        NaverShoppingBroadcastDto dto = modelMapper.map(
+            object, 
+            NaverShoppingBroadcastDto.class
+        );
+        return BroadcastCreateDto.builder()
+                .remoteId(dto.getBroadcastId())
+                .extraData(dto)
+                .build();
+    }
+
     public List<BroadcastCreateDto> parse() {
         List<BroadcastCreateDto> result = new ArrayList();
         JSONObject parsedMilestone, objectList;
@@ -51,19 +64,11 @@ public class NaverShoppingLiveStrategy implements CrawlerStrategyInterface {
                 responseBody = Client.doGet(url).body();
             	objectList = (JSONObject)jsonParser.parse(responseBody);
                 timestamp = (Long)objectList.get("timestamp");
-                result.addAll(
-                    (List)(((List)objectList.get("list"))
-                        .stream()
-                        .map((object) -> {
-                            NaverShoppingBroadcastDto dto = modelMapper.map(
-                                object, NaverShoppingBroadcastDto.class
-                            );
-                            return BroadcastCreateDto.builder()
-                                    .remoteId(dto.getBroadcastId())
-                                    .extraData(dto)
-                                    .build();
-                        }).collect(Collectors.toList()))
-                );
+                for(Object object : (List)objectList.get("list")) {
+                    result.add(
+                        convertObjectDataToBroadcastCreateDto(object)
+                    );
+                }
             } while(timestamp != null);
         }
         return result;
