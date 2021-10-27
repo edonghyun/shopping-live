@@ -28,6 +28,8 @@ public class BroadcastService {
 
     public BroadcastDto createBroadcast(BroadcastCreateDto broadcastCreateDto) {
         Broadcast broadcast = Broadcast.builder()
+                                .remoteId(broadcastCreateDto.getRemoteId())
+                                .extraData(broadcastCreateDto.getExtraData())
                                 .build();
         broadcastRepository.save(broadcast);
         return BroadcastDto.fromEntity(broadcast);

@@ -27,4 +27,6 @@ public class Broadcast {
 
     @ManyToOne(targetEntity=Provider.class, fetch=FetchType.LAZY)
     private Provider provider;
+
+    private Object extraData;
 }

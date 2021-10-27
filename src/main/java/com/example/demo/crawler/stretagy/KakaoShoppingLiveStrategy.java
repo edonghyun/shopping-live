@@ -5,9 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.crawler.strategy.CrawlerStrategyInterface;
+import com.example.demo.core.dto.BroadcastCreateDto;
 
 public class KakaoShoppingLiveStrategy implements CrawlerStrategyInterface {
-    public List<Object> parse() {
+    public List<BroadcastCreateDto> parse() {
         return null;
     }
 }
