@@ -5,6 +5,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.data.util.Streamable;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.core.MongoOperations;
+
 import lombok.RequiredArgsConstructor;
 
 import com.example.demo.core.entity.Broadcast;
@@ -19,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class BroadcastService {
     private final BroadcastRepository broadcastRepository;
+    private final MongoOperations mongoOperation;
 
     public List<BroadcastDto> getBroadcasts() {
         return Streamable.of(broadcastRepository.findAll())
@@ -27,11 +33,23 @@ public class BroadcastService {
     }
 
     public BroadcastDto createBroadcast(BroadcastCreateDto broadcastCreateDto) {
-        Broadcast broadcast = Broadcast.builder()
-                                .remoteId(broadcastCreateDto.getRemoteId())
-                                .extraData(broadcastCreateDto.getExtraData())
-                                .build();
-        broadcastRepository.save(broadcast);
+        String remoteId = broadcastCreateDto.getRemoteId();
+
+        Query query = new Query();
+		query.addCriteria(Criteria.where("remoteId").is(remoteId));
+
+		Update update = new Update();
+		update.set("remoteId", remoteId);
+		update.set("provider", broadcastCreateDto.getProvider());
+		update.set("extraData", broadcastCreateDto.getExtraData());
+
+        mongoOperation.upsert(
+            query, 
+            update, 
+            Broadcast.class
+        );
+
+        Broadcast broadcast = mongoOperation.findOne(query, Broadcast.class);
         return BroadcastDto.fromEntity(broadcast);
     }
 }
