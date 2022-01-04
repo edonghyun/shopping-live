@@ -1,0 +1,24 @@
+.broadcast-box-wrapper {
+  min-height: 250px;
+  padding: 15px;
+  .broadcast-container {
+    border: 1px solid #bbb;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-content: space-around;
+
+    .broadcast-info-head {
+      font-weight: bold;
+      color: #444;
+    }
+
+    .broadcast-profile-image {
+      width: 100px;
+      height: 100px;
+    }
+    .broadcast-bridge-image-pc {
+      width: 100%;
+    }
+  }
+}
