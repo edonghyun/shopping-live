@@ -1,11 +1,13 @@
 package com.example.demo.crawler.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.json.simple.JSONArray;
 
 // "broadcastTitle": "헬렌스타인 21'FW 구스이불 최초 공개",
 // "benefits": [
@@ -84,15 +86,20 @@ import lombok.NoArgsConstructor;
 @Setter
 @NoArgsConstructor
 public class NaverShoppingBroadcastDto {
+    private List benefits;
+    private Object displayProduct;
+
+    private Long channelNo;
+    private Long bridgeId;
+    private Long broadcastId;
     private String broadcastTitle;
-    private Integer channelNo;
+
     private String broadcastStandByImage;
     private String profileImage;
     private String broadcastType;
     private String vid;
     private String broadcastReplayEndUrl;
-    private Integer bridgeId;
-    private String broadcastId;
+
     private String nickname;
     private String broadcastBridgeMobileImage;
     private String serviceId;
@@ -108,7 +115,8 @@ public class NaverShoppingBroadcastDto {
     private String broadcastBridgePcImage;
     private String showHostName;
     private String broadcastBanner;
+    private String status;
+
     private LocalDateTime startDate;
     private LocalDateTime expectedStartDate;
-    private String status;
 } 

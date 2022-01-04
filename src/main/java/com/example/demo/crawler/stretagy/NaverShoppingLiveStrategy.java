@@ -2,10 +2,7 @@ package com.example.demo.crawler.strategy;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
-import java.net.URI;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import org.json.simple.JSONArray;
@@ -17,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 import lombok.Getter;
 
-import com.example.demo.crawler.strategy.CrawlerStrategyInterface;
 import com.example.demo.helper.JSONParser;
 import com.example.demo.crawler.client.Client;
 import com.example.demo.core.dto.BroadcastCreateDto;
@@ -41,11 +37,11 @@ public class NaverShoppingLiveStrategy implements CrawlerStrategyInterface {
         Object object
     ) {
         NaverShoppingBroadcastDto dto = modelMapper.map(
-            object, 
+            object,
             NaverShoppingBroadcastDto.class
         );
         return BroadcastCreateDto.builder()
-                .remoteId(dto.getBroadcastId())
+                .remoteId(String.valueOf(dto.getBroadcastId()))
                 .provider(getProvider())
                 .extraData(dto)
                 .build();
