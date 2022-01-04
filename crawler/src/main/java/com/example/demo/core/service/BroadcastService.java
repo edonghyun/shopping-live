@@ -1,10 +1,11 @@
 package com.example.demo.core.service;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.data.util.Streamable;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -26,10 +27,15 @@ public class BroadcastService {
     private final BroadcastRepository broadcastRepository;
     private final MongoOperations mongoOperation;
 
-    public List<BroadcastDto> getBroadcasts() {
-        return Streamable.of(broadcastRepository.findAll())
-            .stream().map(BroadcastDto::fromEntity)
-            .collect(Collectors.toList());
+    public Page<BroadcastDto> getBroadcasts(Pageable pageable) {
+        Page<Broadcast> broadcastPage = broadcastRepository.findAll(pageable);
+        return new PageImpl<BroadcastDto>(
+                broadcastPage.getContent().stream().map(
+                        BroadcastDto::fromEntity
+                ).collect(Collectors.toList()),
+                pageable,
+                broadcastPage.getTotalElements()
+        );
     }
 
     public BroadcastDto createBroadcast(BroadcastCreateDto broadcastCreateDto) {
