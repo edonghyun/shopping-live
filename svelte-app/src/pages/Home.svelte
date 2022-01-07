@@ -1,14 +1,24 @@
 <script lang="ts">
+    import { beforeUpdate } from 'svelte';
+    import { writable } from 'svelte/store'
     import { Col, Row  } from 'sveltestrap';
     import { getBroadcasts } from '../client';
 
-    $: items = getBroadcasts();
+    const x = writable({
+        data: undefined,
+    });
+
+    beforeUpdate(async () => {
+        const data = await getBroadcasts();
+        $x.data = data;
+    });
+
 </script>
 
-{#await items}
+{#if !$x.data}
     <p>...Loading</p>
-{:then broadcasts }
-    {#each broadcasts as broadcast}
+{:else }
+    {#each $x.data.content as broadcast}
         <Col class="broadcast-box-wrapper" xs="12" sm="6" md="4" lg="3">
             <div class="broadcast-container">
                 <Row class="p-3">
@@ -84,7 +94,7 @@
             </div>
         </Col>
     {/each}
-{/await}
+{/if}
 
 
 
