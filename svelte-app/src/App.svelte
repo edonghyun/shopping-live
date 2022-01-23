@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { Container, Row, Navbar } from 'sveltestrap';
-  import { Router, Route, Link } from "svelte-navigator";
+  import { Container, Row } from 'sveltestrap';
+  import { Router, Route } from "svelte-navigator";
 
+  import Header from "./components/Header.svelte";
   import Home from "./pages/Home.svelte";
   import Login from "./pages/Login.svelte";
   import Register from "./pages/Register.svelte";
@@ -9,18 +10,7 @@
 
 <Router>
     <Container class="p-0" fluid>
-        <Navbar
-                color="dark"
-                dark={true}
-                light={false}
-                class="mb-2"
-        >
-            <Link class="navbar-brand" to="/">HOME</Link>
-            <div>
-                <Link class="navbar-brand" to="/login">LOGIN</Link>
-                <Link class="navbar-brand" to="/register">REGISTER</Link>
-            </div>
-        </Navbar>
+        <Header />
         <Row class="p-3">
             <Route path="/">
                 <Home />

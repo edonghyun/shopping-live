@@ -1,20 +1,22 @@
 <script lang="ts">
-    import { beforeUpdate } from 'svelte';
+    import { onMount } from 'svelte';
     import { writable } from 'svelte/store'
     import { Col, Row  } from 'sveltestrap';
+    import DateFilter from '../components/DateFilter.svelte';
     import { getBroadcasts } from '../client';
 
     const x = writable({
         data: undefined,
     });
 
-    beforeUpdate(async () => {
+    onMount(async () => {
         const data = await getBroadcasts();
         $x.data = data;
     });
 
 </script>
 
+<DateFilter />
 {#if !$x.data}
     <p>...Loading</p>
 {:else }
